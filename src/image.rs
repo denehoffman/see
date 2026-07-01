@@ -19,11 +19,6 @@ impl TerminalImage {
         Ok(Self::from_dynamic(img))
     }
 
-    pub fn from_bytes(bytes: &[u8]) -> Result<Self> {
-        let img = image::load_from_memory(bytes)?;
-        Ok(Self::from_dynamic(img))
-    }
-
     pub fn from_dynamic(img: image::DynamicImage) -> Self {
         let rgba = img.to_rgba8();
         let width = rgba.width();

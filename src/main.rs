@@ -1,14 +1,22 @@
 use anyhow::{Result, anyhow, bail};
 use pico_args::Arguments;
-use see::{image::TerminalImage, render::FitMode};
 use std::{
     ffi::OsString,
     io::{self, Write},
     path::PathBuf,
 };
 
+use crate::{
+    image::TerminalImage,
+    render::{FitMode, render},
+};
+
+mod image;
+mod protocol;
+mod render;
+
 const HELP: &str = "\
-see 1.0.0
+see
 
 View images in the terminal using real graphics protocols.
 
@@ -53,7 +61,7 @@ fn main() -> Result<()> {
     let img = TerminalImage::open(&image)?;
 
     let mut stdout = io::stdout().lock();
-    see::render::render(&mut stdout, &img, &options)?;
+    render(&mut stdout, &img, &options)?;
     stdout.flush()?;
 
     Ok(())
