@@ -1,13 +1,65 @@
 [package]
 name = "see"
-version = "0.1.0"
+version = "1.0.0"
 edition = "2024"
+authors = ["Nathaniel D. Hoffman <nhoffman@wm.edu>"]
+description = "A lightweight terminal image viewer using real terminal graphics protocols."
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/denehoffman/see"
+homepage = "https://github.com/denehoffman/see"
+readme = "README.md"
+keywords = ["terminal", "image", "kitty", "sixel", "iterm2"]
+categories = ["command-line-utilities", "multimedia::images"]
+rust-version = "1.90.0"
+
+[features]
+default = ["png", "jpeg"]
+
+png = ["image/png"]
+jpeg = ["image/jpeg"]
+
+gif = ["image/gif"]
+webp = ["image/webp"]
+bmp = ["image/bmp"]
+ico = ["image/ico"]
+tiff = ["image/tiff"]
+tga = ["image/tga"]
+qoi = ["image/qoi"]
+pnm = ["image/pnm"]
+hdr = ["image/hdr"]
+dds = ["image/dds"]
+exr = ["image/exr"]
+avif = ["image/avif"]
+
+common = ["png", "jpeg", "gif", "webp"]
+all-formats = [
+    "png",
+    "jpeg",
+    "gif",
+    "webp",
+    "bmp",
+    "ico",
+    "tiff",
+    "tga",
+    "qoi",
+    "pnm",
+    "hdr",
+    "dds",
+    "exr",
+    "avif",
+]
 
 [dependencies]
 anyhow = "1.0.103"
 base64 = "0.22.1"
-clap = { version = "4.6.1", features=["derive"] }
 crossterm = "0.29.0"
 icy_sixel = "0.5.0"
-image = "0.25.10"
-iterm2img = "0.1.0"
+image = { version = "0.25.10", default-features = false }
+pico-args = "0.5.0"
+
+[profile.release]
+opt-level = "z"
+strip = true
+lto = true
+codegen-units = 1
+panic = "abort"

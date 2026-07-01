@@ -121,15 +121,12 @@ fn render_iterm2<W: Write>(
     options: &ResolvedRenderOptions,
 ) -> Result<()> {
     let png = img.to_png_bytes()?;
-
-    let escape = iterm2img::from_bytes(png)
-        .inline(true)
-        .preserve_aspect_ratio(true)
-        .width_px(options.width_pixels as u64)
-        .height_px(options.height_pixels as u64)
-        .build();
-
-    write!(out, "{escape}")?;
+    let encoded = base64::engine::general_purpose::STANDARD.encode(&png);
+    write!(
+        out,
+        "\x1b]1337;File=inline=1;width={}px;height={}px;preserveAspectRatio=1:{}\x07",
+        options.width_pixels, options.height_pixels, encoded,
+    )?;
     Ok(())
 }
 
