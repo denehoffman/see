@@ -2,7 +2,20 @@
 
 ### 🐛 Bug Fixes
 
+- Change name back, turns out it is actually taken
+
+### ⚙️ Miscellaneous Tasks
+
+- Add Cargo.lock
+## [1.0.2] - 2026-07-01
+
+### 🐛 Bug Fixes
+
 - Rename crate back to see, I think this was an auth issue
+
+### 📚 Documentation
+
+- Update changelog
 ## [1.0.1] - 2026-07-01
 
 ### 🐛 Bug Fixes
