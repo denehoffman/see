@@ -4,9 +4,14 @@
 
 - Change name back, turns out it is actually taken
 
+### 📚 Documentation
+
+- Update changelog
+
 ### ⚙️ Miscellaneous Tasks
 
 - Add Cargo.lock
+- Bump version
 ## [1.0.2] - 2026-07-01
 
 ### 🐛 Bug Fixes
