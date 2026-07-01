@@ -1,5 +1,5 @@
 [package]
-name = "see"
+name = "see-cli"
 version = "1.0.2"
 edition = "2024"
 authors = ["Nathaniel D. Hoffman <nhoffman@wm.edu>"]

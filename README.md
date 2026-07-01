@@ -7,7 +7,7 @@ A *very* lightweight terminal image viewer for terminals that support real graph
 ## Installation
 
 ```sh
-cargo install see --locked
+cargo install see-cli --locked
 ```
 
 The default install only includes PNG and JPEG support. Other image formats can be enabled via feature flags.
