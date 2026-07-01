@@ -1,6 +1,6 @@
 [package]
 name = "see-cli"
-version = "1.0.2"
+version = "1.0.3"
 edition = "2024"
 authors = ["Nathaniel D. Hoffman <nhoffman@wm.edu>"]
 description = "A lightweight terminal image viewer using real terminal graphics protocols."
