@@ -1,7 +1,6 @@
 use anyhow::{Result, anyhow, bail};
 use pico_args::Arguments;
 use std::{
-    ffi::OsString,
     io::{self, Write},
     path::PathBuf,
 };
@@ -21,7 +20,7 @@ see
 View images in the terminal using real graphics protocols.
 
 USAGE:
-    see [OPTIONS] <IMAGE>
+    see [OPTIONS] <IMAGE>...
 
 OPTIONS:
     -f, --full-width       Fit to terminal width; height may exceed the visible window
@@ -33,6 +32,8 @@ OPTIONS:
 
 EXAMPLES:
     see image.png
+    see a.png b.png c.jpg
+    see *.png
     see image.png -f
     see image.png -o
     see image.png -W 800
@@ -54,22 +55,25 @@ fn main() -> Result<()> {
     }
 
     let options = resolve_fit_mode(&cli)?;
-    let image = cli
-        .image
-        .ok_or_else(|| anyhow!("missing image path\n\n{HELP}"))?;
-
-    let img = TerminalImage::open(&image)?;
+    if cli.images.is_empty() {
+        return Err(anyhow!("missing image path\n\n{HELP}"));
+    }
 
     let mut stdout = io::stdout().lock();
-    render(&mut stdout, &img, &options)?;
-    stdout.flush()?;
+
+    for image in &cli.images {
+        let img = TerminalImage::open(image)?;
+        render(&mut stdout, &img, &options)?;
+        writeln!(stdout)?;
+        stdout.flush()?;
+    }
 
     Ok(())
 }
 
 #[derive(Debug)]
 struct Cli {
-    image: Option<PathBuf>,
+    images: Vec<PathBuf>,
     width: Option<u32>,
     height: Option<u32>,
     original: bool,
@@ -90,16 +94,19 @@ impl Cli {
         let width = args.opt_value_from_str(["-W", "--width"])?;
         let height = args.opt_value_from_str(["-H", "--height"])?;
 
-        let image = args.opt_free_from_os_str(parse_path)?;
-
         let remaining = args.finish();
 
-        if !remaining.is_empty() {
-            bail!("unexpected argument(s): {}", format_args(&remaining));
+        if let Some(arg) = remaining
+            .iter()
+            .find(|arg| arg.to_string_lossy().starts_with('-'))
+        {
+            bail!("unexpected argument: {}", arg.to_string_lossy());
         }
 
+        let images = remaining.into_iter().map(PathBuf::from).collect();
+
         Ok(Self {
-            image,
+            images,
             width,
             height,
             original,
@@ -133,15 +140,4 @@ fn resolve_fit_mode(cli: &Cli) -> Result<FitMode> {
         (None, Some(height)) => Ok(FitMode::HeightPixels(height)),
         (None, None) => Ok(FitMode::Terminal),
     }
-}
-
-fn parse_path(value: &std::ffi::OsStr) -> Result<PathBuf, &'static str> {
-    Ok(PathBuf::from(value))
-}
-
-fn format_args(args: &[OsString]) -> String {
-    args.iter()
-        .map(|arg| arg.to_string_lossy())
-        .collect::<Vec<_>>()
-        .join(" ")
 }

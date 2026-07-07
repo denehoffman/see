@@ -47,6 +47,16 @@ Fit inside a pixel box:
 see image.png --width 800 --height 600
 ```
 
+Displaying multiple images:
+
+```sh
+see *.png
+```
+or
+```sh
+see a.png b.jpg
+```
+
 ## Supported Terminals
 
 Support depends on the terminal’s graphics protocol support. The current goal is to support terminals implementing Kitty graphics, iTerm2 inline images, or SIXEL, and the protocol detection is done automatically. If your terminal doesn't seem to work but supports one of these protocols, just create an issue!
